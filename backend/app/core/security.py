@@ -150,11 +150,13 @@ def _extract_token(request: Request) -> str:
     # 1. Authorization: Bearer <token>
     auth_header: str | None = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
-        return auth_header[len("Bearer "):]
+        return auth_header[len("Bearer "):].strip()
 
     # 2. HTTP-only cookie fallback
     cookie_token: str | None = request.cookies.get("access_token")
     if cookie_token:
+        if cookie_token.startswith("Bearer "):
+            cookie_token = cookie_token[len("Bearer "):].strip()
         return cookie_token
 
     raise HTTPException(

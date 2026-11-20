@@ -16,5 +16,5 @@ class Rule(Base, UUIDMixin, TimestampMixin):
     severity: Mapped[str] = mapped_column(String(20), default="medium", nullable=False)
     is_enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
-    camera = relationship("Camera", back_populates="rules")
-    zone = relationship("Zone", back_populates="rules")
+    camera = relationship("Camera", back_populates="rules", lazy="selectin")
+    zone = relationship("Zone", back_populates="rules", lazy="selectin")

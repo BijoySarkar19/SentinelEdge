@@ -81,6 +81,8 @@ services:
       REDIS_URL: redis://redis:6379/0
       APP_ENV: development
       API_BASE_URL: http://backend:8000
+      HF_HOME: /tmp/cache/huggingface
+      TORCH_HOME: /tmp/cache/torch
     depends_on:
       postgres:
         condition: service_healthy

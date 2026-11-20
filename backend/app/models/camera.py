@@ -15,6 +15,6 @@ class Camera(Base, UUIDMixin, TimestampMixin):
     status: Mapped[str] = mapped_column(String(20), default="offline", nullable=False)  # online, offline, processing, error
     processing_enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
-    zones = relationship("Zone", back_populates="camera", cascade="all, delete-orphan")
-    incidents = relationship("Incident", back_populates="camera", cascade="all, delete-orphan")
-    rules = relationship("Rule", back_populates="camera", cascade="all, delete-orphan")
+    zones = relationship("Zone", back_populates="camera", cascade="all, delete-orphan", lazy="selectin")
+    incidents = relationship("Incident", back_populates="camera", cascade="all, delete-orphan", lazy="selectin")
+    rules = relationship("Rule", back_populates="camera", cascade="all, delete-orphan", lazy="selectin")

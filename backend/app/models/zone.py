@@ -13,6 +13,6 @@ class Zone(Base, UUIDMixin, TimestampMixin):
     polygon_coordinates: Mapped[list[Any]] = mapped_column(JSON, nullable=False)  # list of [lat, lng] or [x, y]
     zone_type: Mapped[str] = mapped_column(String(30), default="restricted", nullable=False)  # crowd, restricted, vehicle, access_lane, custom
 
-    camera = relationship("Camera", back_populates="zones")
-    incidents = relationship("Incident", back_populates="zone")
-    rules = relationship("Rule", back_populates="zone")
+    camera = relationship("Camera", back_populates="zones", lazy="selectin")
+    incidents = relationship("Incident", back_populates="zone", lazy="selectin")
+    rules = relationship("Rule", back_populates="zone", lazy="selectin")

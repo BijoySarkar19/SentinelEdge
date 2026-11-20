@@ -27,7 +27,7 @@ class Incident(Base, UUIDMixin, TimestampMixin):
     inference_latency_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     simulated: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False, index=True)
 
-    camera = relationship("Camera", back_populates="incidents")
-    zone = relationship("Zone", back_populates="incidents")
-    audits = relationship("IncidentAudit", back_populates="incident", cascade="all, delete-orphan", order_by="IncidentAudit.timestamp.desc()")
-    embedding = relationship("IncidentEmbedding", back_populates="incident", uselist=False, cascade="all, delete-orphan")
+    camera = relationship("Camera", back_populates="incidents", lazy="selectin")
+    zone = relationship("Zone", back_populates="incidents", lazy="selectin")
+    audits = relationship("IncidentAudit", back_populates="incident", cascade="all, delete-orphan", order_by="IncidentAudit.timestamp.desc()", lazy="selectin")
+    embedding = relationship("IncidentEmbedding", back_populates="incident", uselist=False, cascade="all, delete-orphan", lazy="selectin")

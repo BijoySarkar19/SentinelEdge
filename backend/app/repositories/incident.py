@@ -67,8 +67,8 @@ class IncidentRepository:
     async def create(self, incident: Incident) -> Incident:
         self.db.add(incident)
         await self.db.commit()
-        await self.db.refresh(incident)
-        return incident
+        loaded = await self.get_by_id(incident.id)
+        return loaded or incident
 
     async def update_status(
         self,
@@ -93,5 +93,4 @@ class IncidentRepository:
         )
         self.db.add(audit)
         await self.db.commit()
-        await self.db.refresh(incident)
-        return incident
+        return await self.get_by_id(incident.id)

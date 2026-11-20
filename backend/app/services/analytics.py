@@ -61,16 +61,17 @@ class AnalyticsService:
         )
 
     async def get_trends(self, days: int = 7) -> list[TrendPoint]:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
         sql = """
             SELECT to_char(created_at, 'YYYY-MM-DD') AS day,
                    COUNT(*) AS total,
                    COUNT(*) FILTER (WHERE severity = 'critical') AS critical
             FROM incidents
-            WHERE created_at >= NOW() - (:days || ' days')::interval
+            WHERE created_at >= :cutoff
             GROUP BY day
             ORDER BY day ASC
         """
-        rows = await self.db.execute(text(sql), {"days": days})
+        rows = await self.db.execute(text(sql), {"cutoff": cutoff})
         return [
             TrendPoint(date=r[0], count=r[1], critical_count=r[2])
             for r in rows

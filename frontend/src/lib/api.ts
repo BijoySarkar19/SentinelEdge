@@ -21,10 +21,22 @@ const api: AxiosInstance = axios.create({
   timeout: 30000,
 });
 
+// Interceptors
+api.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('sentinel_token');
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
 api.interceptors.response.use(
   (res) => res,
   (error: AxiosError) => {
     if (error.response?.status === 401 && typeof window !== 'undefined') {
+      localStorage.removeItem('sentinel_token');
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -33,9 +45,22 @@ api.interceptors.response.use(
 
 // Auth
 export const authApi = {
-  login: (username: string, password: string) =>
-    api.post('/auth/login', { username, password }),
-  logout: () => api.post('/auth/logout'),
+  login: async (username: string, password: string) => {
+    const res = await api.post('/auth/login', { username, password });
+    if (res.data?.access_token && typeof window !== 'undefined') {
+      localStorage.setItem('sentinel_token', res.data.access_token);
+    }
+    return res;
+  },
+  logout: async () => {
+    try {
+      await api.post('/auth/logout');
+    } finally {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('sentinel_token');
+      }
+    }
+  },
   me: () => api.get<User>('/auth/me'),
 };
 
@@ -77,9 +102,9 @@ export const analyticsApi = {
 // Search
 export const searchApi = {
   semantic: (query: string, filters?: Record<string, unknown>) =>
-    api.post<{ results: SearchResult[]; latency_ms: number }>('/search/semantic', {
+    api.post<{ results: SearchResult[]; search_latency_ms: number; latency_ms?: number }>('/search/semantic', {
       query,
-      filters,
+      ...filters,
     }),
 };
 

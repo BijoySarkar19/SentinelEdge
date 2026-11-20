@@ -78,9 +78,9 @@ async def search_incidents(
                        1 - (ie.embedding <=> (:query_vector)::vector) AS similarity
                 FROM incidents i
                 JOIN incident_embeddings ie ON i.id = ie.incident_id
-                WHERE (:severity IS NULL OR i.severity = :severity)
-                  AND (:camera_id IS NULL OR i.camera_id = :camera_id::uuid)
-                  AND (:status IS NULL OR i.status = :status)
+                WHERE (CAST(:severity AS text) IS NULL OR i.severity = CAST(:severity AS text))
+                  AND (CAST(:camera_id AS text) IS NULL OR i.camera_id = CAST(:camera_id AS uuid))
+                  AND (CAST(:status AS text) IS NULL OR i.status = CAST(:status AS text))
                 ORDER BY similarity DESC
                 LIMIT :limit
             """
@@ -113,39 +113,40 @@ async def search_incidents(
             results = []
 
     if not results:
-        # Full text search fallback
-        sql = """
-            SELECT id, title, description, severity, status, confidence, camera_id, created_at
-            FROM incidents
-            WHERE (title ILIKE :q OR description ILIKE :q)
-              AND (:severity IS NULL OR severity = :severity)
-              AND (:status IS NULL OR status = :status)
-            ORDER BY created_at DESC
-            LIMIT :limit
-        """
-        rows = await db.execute(
-            text(sql),
-            {
-                "q": f"%{query}%",
+        # Full text / keyword search fallback
+        words = [w.strip() for w in query.split() if len(w.strip()) > 2]
+        if words:
+            clauses = " OR ".join([f"(title ILIKE :w{i} OR description ILIKE :w{i})" for i in range(len(words))])
+            sql = f"""
+                SELECT id, title, description, severity, status, confidence, camera_id, created_at
+                FROM incidents
+                WHERE ({clauses})
+                  AND (CAST(:severity AS text) IS NULL OR severity = CAST(:severity AS text))
+                  AND (CAST(:status AS text) IS NULL OR status = CAST(:status AS text))
+                ORDER BY created_at DESC
+                LIMIT :limit
+            """
+            params = {
+                **{f"w{i}": f"%{w}%" for i, w in enumerate(words)},
                 "severity": severity,
                 "status": status,
                 "limit": limit,
-            },
-        )
-        for row in rows:
-            results.append(
-                SemanticSearchResultItem(
-                    incident_id=str(row[0]),
-                    title=row[1],
-                    description=row[2],
-                    severity=row[3],
-                    status=row[4],
-                    confidence=float(row[5]),
-                    camera_id=str(row[6]),
-                    created_at=str(row[7]),
-                    similarity_score=0.5,
+            }
+            rows = await db.execute(text(sql), params)
+            for row in rows:
+                results.append(
+                    SemanticSearchResultItem(
+                        incident_id=str(row[0]),
+                        title=row[1],
+                        description=row[2],
+                        severity=row[3],
+                        status=row[4],
+                        confidence=float(row[5]),
+                        camera_id=str(row[6]),
+                        created_at=str(row[7]),
+                        similarity_score=0.85,
+                    )
                 )
-            )
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000.0
     SEARCH_LATENCY.observe(elapsed_ms / 1000.0)
