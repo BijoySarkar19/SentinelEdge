@@ -1,19 +1,22 @@
 # =============================================================================
-# SentinelEdge — Docker Compose (Compose Spec / version-less)
-# Core stack: PostgreSQL + pgvector, Redis, FastAPI backend, Next.js frontend,
-# Prometheus, Grafana
+# SentinelEdge — Complete Multi-Service Docker Compose
+# Architecture:
+# - postgres: PostgreSQL 16 with pgvector extension
+# - redis: Redis 7.4 Streams event broker
+# - backend: FastAPI v1 REST API, WebSockets, pgvector embeddings
+# - edge: In-memory Computer Vision runtime (YOLOv8n + ByteTrack + Privacy)
+# - frontend: Next.js 15 App Router web console
+# - prometheus: Application metrics collection
+# - grafana: Real-time telemetry visualization dashboards
 # =============================================================================
 
 name: sentineledge
 
-# ---------------------------------------------------------------------------
-# Services
-# ---------------------------------------------------------------------------
 services:
 
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   # PostgreSQL 16 with pgvector
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
   postgres:
     image: pgvector/pgvector:pg16
     container_name: sentinel_postgres
@@ -25,7 +28,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-sentinel}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sentinelpass}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./infrastructure/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -38,16 +41,16 @@ services:
     networks:
       - sentinel_net
 
-  # -------------------------------------------------------------------------
-  # Redis 7.4
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Redis 7.4 Streams Event Broker
+  # ---------------------------------------------------------------------------
   redis:
     image: redis:7.4-alpine
     container_name: sentinel_redis
     restart: unless-stopped
     command: redis-server /usr/local/etc/redis/redis.conf
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
       - ./infrastructure/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
@@ -60,9 +63,9 @@ services:
     networks:
       - sentinel_net
 
-  # -------------------------------------------------------------------------
-  # FastAPI Backend
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # FastAPI Backend (REST API + pgvector + WebSockets)
+  # ---------------------------------------------------------------------------
   backend:
     build:
       context: ./backend
@@ -70,12 +73,14 @@ services:
     container_name: sentinel_backend
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "${BACKEND_PORT:-8000}:8000"
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql+asyncpg://sentinel:sentinelpass@postgres:5432/sentineledge
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-sentinel}:${POSTGRES_PASSWORD:-sentinelpass}@postgres:5432/${POSTGRES_DB:-sentineledge}
       REDIS_URL: redis://redis:6379/0
+      APP_ENV: development
+      API_BASE_URL: http://backend:8000
     depends_on:
       postgres:
         condition: service_healthy
@@ -92,9 +97,32 @@ services:
     networks:
       - sentinel_net
 
-  # -------------------------------------------------------------------------
-  # Next.js Frontend
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Edge Computer Vision & Privacy Processor (Containerized)
+  # ---------------------------------------------------------------------------
+  edge:
+    build:
+      context: ./edge
+      dockerfile: Dockerfile
+    container_name: sentinel_edge
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      BACKEND_API_URL: http://backend:8000
+      INGEST_ENDPOINT: /api/v1/incidents/ingest
+      INFERENCE_DEVICE: ${INFERENCE_DEVICE:-cpu}
+      CAMERA_ID: CAM-DOCKER-01
+      SOURCE_URI: ${SOURCE_URI:-0}
+      PRIVACY_MODE: metadata_only
+    depends_on:
+      - backend
+    networks:
+      - sentinel_net
+
+  # ---------------------------------------------------------------------------
+  # Next.js Frontend (Operations Console)
+  # ---------------------------------------------------------------------------
   frontend:
     build:
       context: ./frontend
@@ -102,24 +130,24 @@ services:
     container_name: sentinel_frontend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT:-3000}:3000"
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_API_URL: http://localhost:${BACKEND_PORT:-8000}
       NODE_ENV: production
     depends_on:
       - backend
     networks:
       - sentinel_net
 
-  # -------------------------------------------------------------------------
-  # Prometheus
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Prometheus Metrics Scraper
+  # ---------------------------------------------------------------------------
   prometheus:
     image: prom/prometheus:v3.1.0
     container_name: sentinel_prometheus
     restart: unless-stopped
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORT:-9090}:9090"
     volumes:
       - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     command:
@@ -131,15 +159,15 @@ services:
     networks:
       - sentinel_net
 
-  # -------------------------------------------------------------------------
-  # Grafana
-  # -------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Grafana Telemetry Dashboard
+  # ---------------------------------------------------------------------------
   grafana:
     image: grafana/grafana:11.4.0
     container_name: sentinel_grafana
     restart: unless-stopped
     ports:
-      - "3001:3000"
+      - "${GRAFANA_PORT:-3001}:3000"
     environment:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
       GF_USERS_ALLOW_SIGN_UP: "false"
@@ -161,7 +189,7 @@ networks:
     driver: bridge
 
 # ---------------------------------------------------------------------------
-# Named volumes
+# Named Volumes
 # ---------------------------------------------------------------------------
 volumes:
   postgres_data:

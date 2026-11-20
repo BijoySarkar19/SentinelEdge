@@ -32,10 +32,9 @@
 - [✨ Key Architectural Innovations](#-key-architectural-innovations)
 - [🚀 Quick Start (Run SentinelEdge in 3 Minutes)](#-quick-start-run-sentineledge-in-3-minutes)
   - [Prerequisites](#prerequisites)
-  - [Step 1: Launch Backend Infrastructure (Docker)](#step-1-launch-backend-infrastructure-docker)
-  - [Step 2: Start Edge Computer Vision Processor](#step-2-start-edge-computer-vision-processor)
-  - [Step 3: Open Enterprise Web Console](#step-3-open-enterprise-web-console)
-  - [Step 4: Generate Synthetic Incidents](#step-4-generate-synthetic-incidents)
+  - [Step 1: Launch Infrastructure with Docker](#step-1-launch-infrastructure-with-docker)
+  - [Step 2: Open Enterprise Web Console](#step-2-open-enterprise-web-console)
+  - [Step 3: Generate Synthetic Incidents](#step-3-generate-synthetic-incidents)
 - [🛡️ Privacy-First Zero-Video Guarantee](#️-privacy-first-zero-video-guarantee)
 - [🧠 Incident Rules Engine](#-incident-rules-engine)
 - [🔍 Semantic Incident Search (pgvector)](#-semantic-incident-search-pgvector)
@@ -82,62 +81,63 @@ Traditional CCTV systems record hundreds of hours of passive footage that operat
 
 ---
 
-### Step 1: Launch Backend Infrastructure (Docker)
-In your PowerShell or bash terminal:
+### Step 1: Launch Infrastructure with Docker
+
+SentinelEdge supports two flexible deployment modes:
+
+#### Option A: Full All-in-One Docker Stack (Recommended for Quick Demo)
+Launch every component—PostgreSQL (pgvector), Redis Streams, FastAPI backend, Next.js frontend, Prometheus, Grafana, and the containerized Edge CV runtime—with a single command:
 
 ```bash
 # Clone the repository
 git clone https://github.com/BijoySarkar19/SentinelEdge.git
 cd SentinelEdge
 
-# Ensure environment file is created
+# Copy environment template
 cp .env.example .env
 
-# Spin up PostgreSQL (with pgvector), Redis, Prometheus, and Grafana
-docker compose up -d
+# Build and start all 7 microservices in Docker
+docker compose up -d --build
 ```
 
-Verify that services are running healthy:
+Verify service statuses:
 ```bash
 docker compose ps
 ```
 
+> **Tip for Port Conflicts**: If ports `3000`, `8000`, `5432`, or `6379` are used by another project on your machine, simply change `FRONTEND_PORT`, `BACKEND_PORT`, `POSTGRES_PORT`, or `REDIS_PORT` in your `.env` file (e.g. `FRONTEND_PORT=3005`, `BACKEND_PORT=8005`).
+
 ---
 
-### Step 2: Start Edge Computer Vision Processor
-
-The computer vision engine runs natively on your machine to maximize hardware performance and eliminate Docker GPU virtualization overhead.
+#### Option B: Hybrid Edge Deployment (Maximum GPU & Webcam Performance)
+Run backend databases and monitoring in Docker, but run the Edge CV runtime directly on Windows/Linux host for zero-virtualization-overhead access to your **NVIDIA RTX 3050 Laptop GPU** and native webcam:
 
 ```bash
-# Run the hardware diagnostic tool to verify CUDA or CPU target
+# 1. Spin up backend infrastructure in Docker
+docker compose up -d postgres redis backend prometheus grafana
+
+# 2. Run GPU hardware diagnostics on host
 python scripts/check_gpu.py
 
-# Launch the real-time edge processing engine:
-# Using local webcam (index 0):
-python edge/src/sentinledge/main.py --source 0
+# 3. Launch native Edge CV processor (uses webcam 0 or video file)
+python edge/src/sentinledge/main.py
 
-# Or using a video file:
-# python edge/src/sentinledge/main.py --source "path/to/test_footage.mp4"
-```
-
-> **Note on Hardware**: Designed specifically for the **NVIDIA GeForce RTX 3050 Laptop GPU (6GB VRAM)**. If CUDA is not detected, SentinelEdge automatically activates CPU inference without crashing.
-
----
-
-### Step 3: Open Enterprise Web Console
-
-In a separate terminal window:
-
-```bash
+# 4. (Optional) Run frontend dev server on host
 cd frontend
 npm install
 npm run dev
 ```
 
-Navigate to **[http://localhost:3000](http://localhost:3000)** in your browser.
+---
+
+### Step 2: Open Enterprise Web Console
+
+Navigate to **[http://localhost:3000](http://localhost:3000)** (or your custom `FRONTEND_PORT`) in your browser.
 
 - **Default Username**: `admin`
 - **Default Password**: `Admin@Sentinel2026!`
+- **Grafana Dashboards**: **[http://localhost:3001](http://localhost:3001)** (admin / admin)
+- **FastAPI OpenAPI Swagger**: **[http://localhost:8000/docs](http://localhost:8000/docs)**
 
 #### Dashboard Features Available Immediately:
 - 📊 **Operational KPI Cards**: Total cameras, active incident alerts, average inference latency, and privacy compliance rate.
@@ -148,7 +148,7 @@ Navigate to **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-### Step 4: Generate Synthetic Incidents
+### Step 3: Generate Synthetic Incidents
 
 To populate the dashboard with realistic demonstration events without needing real-world physical cameras:
 

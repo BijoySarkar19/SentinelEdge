@@ -73,10 +73,16 @@ def main():
     source = VideoIngestionSource(edge_settings.source_uri, frame_skip=edge_settings.inference_frame_skip)
     logger.info("Opening video source", source=edge_settings.source_uri)
     if not source.open():
-        logger.warning("Could not open source; running dry pipeline test loop with synthetic frame")
+        logger.warning("Could not open video source; running dry pipeline test loop with synthetic stream", source=edge_settings.source_uri)
         import numpy as np
         fake_frame = np.zeros((720, 1280, 3), dtype=np.uint8)
-        frames_gen = [(i, time.time(), fake_frame) for i in range(1, 20)]
+        def _synthetic_stream():
+            idx = 0
+            while True:
+                idx += 1
+                time.sleep(0.1)
+                yield idx, time.time(), fake_frame.copy()
+        frames_gen = _synthetic_stream()
     else:
         frames_gen = source.frames()
 

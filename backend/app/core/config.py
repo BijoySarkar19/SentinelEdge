@@ -124,7 +124,7 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     frontend_url: str = Field(default="http://localhost:3000", description="Public URL of the frontend application")
     api_base_url: str = Field(default="http://localhost:8000", description="Public base URL of this API")
-    cors_origins: list[str] = Field(
+    cors_origins: list[str] | str = Field(
         default=["http://localhost:3000"],
         description="List of allowed CORS origins",
     )
@@ -138,6 +138,19 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     # Validators
     # ------------------------------------------------------------------
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v: Any) -> Any:
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
     @field_validator("app_env")
     @classmethod
     def validate_app_env(cls, v: str) -> str:
