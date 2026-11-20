@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="340">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050B16" />
+      <stop offset="50%" stop-color="#091426" />
+      <stop offset="100%" stop-color="#050B16" />
+    </linearGradient>
+
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B192D" />
+      <stop offset="100%" stop-color="#10223A" />
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(34, 211, 238, 0.05)" stroke-width="1" />
+    </pattern>
+
+    <style>
+      @keyframes pulse {
+        0%, 100% { opacity: 0.8; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.03); }
+      }
+      @keyframes scanline {
+        0% { transform: translateY(-30px); opacity: 0; }
+        20% { opacity: 0.8; }
+        80% { opacity: 0.8; }
+        100% { transform: translateY(320px); opacity: 0; }
+      }
+      @keyframes radarRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes wave {
+        0%, 100% { stroke-dashoffset: 0; }
+        50% { stroke-dashoffset: 40; }
+      }
+      .shield-group {
+        transform-origin: 160px 170px;
+        animation: pulse 4s ease-in-out infinite;
+      }
+      .radar-sweep {
+        transform-origin: 160px 170px;
+        animation: radarRotate 6s linear infinite;
+      }
+      .scan-beam {
+        animation: scanline 4s ease-in-out infinite;
+      }
+      .telemetry-line {
+        stroke-dasharray: 8 4;
+        animation: wave 3s linear infinite;
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGrad)" />
+  <rect width="100%" height="100%" fill="url(#grid)" />
+
+  <!-- Ambient Light Orbs -->
+  <circle cx="160" cy="170" r="140" fill="#22D3EE" opacity="0.08" filter="url(#glow)" />
+  <circle cx="950" cy="90" r="180" fill="#3B82F6" opacity="0.06" filter="url(#glow)" />
+
+  <!-- Scanning Beam Effect -->
+  <line x1="0" y1="0" x2="1200" y2="0" stroke="url(#cyanGrad)" stroke-width="2" opacity="0.6" class="scan-beam" filter="url(#subtleGlow)" />
+
+  <!-- Decorative Circuit Wave Lines -->
+  <path d="M 320 220 L 520 220 L 580 260 L 980 260 L 1020 220 L 1180 220" fill="none" stroke="#22D3EE" stroke-width="1.5" opacity="0.25" class="telemetry-line" />
+  <circle cx="580" cy="260" r="3" fill="#22D3EE" opacity="0.7" />
+  <circle cx="980" cy="260" r="3" fill="#3B82F6" opacity="0.7" />
+
+  <!-- Shield & Radar Hub -->
+  <g class="shield-group">
+    <!-- Radar outer range rings -->
+    <circle cx="160" cy="170" r="85" fill="none" stroke="#22D3EE" stroke-width="1" opacity="0.2" stroke-dasharray="4 4" />
+    <circle cx="160" cy="170" r="110" fill="none" stroke="#3B82F6" stroke-width="1" opacity="0.15" />
+
+    <!-- Radar Sweep Wedge -->
+    <path d="M 160 170 L 235 125 A 85 85 0 0 1 245 170 Z" fill="url(#cyanGrad)" opacity="0.15" class="radar-sweep" />
+
+    <!-- Shield Polygon -->
+    <path d="M 160 90 L 225 120 V 175 C 225 218 197 248 160 260 C 123 248 95 218 95 175 V 120 Z"
+          fill="url(#shieldGrad)" stroke="#22D3EE" stroke-width="3" filter="url(#subtleGlow)" />
+
+    <!-- Shield Inner Core Eye -->
+    <ellipse cx="160" cy="170" rx="36" ry="24" fill="none" stroke="#22D3EE" stroke-width="2.5" />
+    <circle cx="160" cy="170" r="12" fill="#22D3EE" filter="url(#subtleGlow)">
+      <animate attributeName="r" values="10;13;10" dur="2.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="160" cy="170" r="5" fill="#050B16" />
+
+    <!-- Reticle Crosshairs -->
+    <line x1="160" y1="135" x2="160" y2="148" stroke="#22D3EE" stroke-width="2" />
+    <line x1="160" y1="192" x2="160" y2="205" stroke="#22D3EE" stroke-width="2" />
+    <line x1="115" y1="170" x2="128" y2="170" stroke="#22D3EE" stroke-width="2" />
+    <line x1="192" y1="170" x2="205" y2="170" stroke="#22D3EE" stroke-width="2" />
+  </g>
+
+  <!-- Typography & Headers -->
+  <g transform="translate(320, 0)">
+    <!-- Pill Badge -->
+    <g transform="translate(0, 68)">
+      <rect width="280" height="26" rx="13" fill="rgba(34, 211, 238, 0.1)" stroke="rgba(34, 211, 238, 0.3)" stroke-width="1" />
+      <circle cx="14" cy="13" r="4" fill="#10B981">
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite" />
+      </circle>
+      <text x="26" y="17" fill="#22D3EE" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.2">PRIVACY-FIRST EDGE AI PLATFORM</text>
+    </g>
+
+    <!-- Main Title -->
+    <text x="0" y="142" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="52" font-weight="900" letter-spacing="-1">
+      SENTINEL<tspan fill="#22D3EE">EDGE</tspan>
+    </text>
+
+    <!-- Tagline -->
+    <text x="0" y="178" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="0.4">
+      See the Risk. <tspan fill="#22D3EE">Protect the Privacy.</tspan> Respond Intelligently.
+    </text>
+
+    <!-- Specs Pill Group -->
+    <g transform="translate(0, 215)">
+      <rect x="0" y="0" width="130" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
+      <text x="14" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="600">RTX 3050 6GB</text>
+
+      <rect x="140" y="0" width="115" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
+      <text x="154" y="18" fill="#22D3EE" font-family="monospace" font-size="11" font-weight="600">YOLOv8 + Byte</text>
+
+      <rect x="265" y="0" width="105" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
+      <text x="279" y="18" fill="#3B82F6" font-family="monospace" font-size="11" font-weight="600">FastAPI v1</text>
+
+      <rect x="380" y="0" width="100" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
+      <text x="394" y="18" fill="#10B981" font-family="monospace" font-size="11" font-weight="600">pgvector</text>
+
+      <rect x="490" y="0" width="110" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
+      <text x="504" y="18" fill="#F97316" font-family="monospace" font-size="11" font-weight="600">Next.js 15</text>
+    </g>
+  </g>
+</svg>
