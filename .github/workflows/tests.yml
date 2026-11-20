@@ -1,0 +1,22 @@
+name: Edge & Pipeline Tests
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  edge-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Edge Runtime Dependencies
+        run: |
+          pip install pytest opencv-python-headless numpy pydantic pydantic-settings structlog httpx
+      - name: Run Edge Unit Tests
+        run: |
+          python -m pytest edge/tests -v

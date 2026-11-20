@@ -1,0 +1,91 @@
+# =============================================================================
+# SentinelEdge — Streaming Extension Compose File
+# Extends compose.yaml with Redpanda (Kafka-compatible broker) and
+# Redpanda Console (web UI).
+#
+# Usage:
+#   docker compose -f compose.yaml -f compose.streaming.yaml up -d
+# =============================================================================
+
+name: sentineledge
+
+# ---------------------------------------------------------------------------
+# Services
+# ---------------------------------------------------------------------------
+services:
+
+  # -------------------------------------------------------------------------
+  # Redpanda — Kafka-compatible streaming broker
+  # -------------------------------------------------------------------------
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.3.1
+    container_name: sentinel_redpanda
+    restart: unless-stopped
+    command:
+      - redpanda
+      - start
+      - --mode
+      - dev-container
+      - --kafka-addr
+      - PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://localhost:9092
+      - --pandaproxy-addr
+      - 0.0.0.0:8082
+      - --advertise-pandaproxy-addr
+      - localhost:8082
+      - --schema-registry-addr
+      - 0.0.0.0:8081
+      - --rpc-addr
+      - 0.0.0.0:33145
+      - --advertise-rpc-addr
+      - redpanda:33145
+    ports:
+      - "9092:9092"   # Kafka API
+      - "8081:8081"   # Schema Registry
+      - "8082:8082"   # Pandaproxy (REST Proxy)
+      - "9644:9644"   # Prometheus / Admin API
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -q 'Healthy:.*true'"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    networks:
+      - sentinel_net
+
+  # -------------------------------------------------------------------------
+  # Redpanda Console — web UI for topic/consumer-group management
+  # -------------------------------------------------------------------------
+  redpanda_console:
+    image: docker.redpanda.com/redpandadata/console:v2.8.0
+    container_name: sentinel_console
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+      KAFKA_SCHEMAREGISTRY_ENABLED: "true"
+      KAFKA_SCHEMAREGISTRY_URLS: http://redpanda:8081
+      SERVER_LISTENPORT: "8080"
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    networks:
+      - sentinel_net
+
+# ---------------------------------------------------------------------------
+# Named volumes (extends the base volumes from compose.yaml)
+# ---------------------------------------------------------------------------
+volumes:
+  redpanda_data:
+    driver: local
+
+# ---------------------------------------------------------------------------
+# Networks (must match the base compose.yaml network)
+# ---------------------------------------------------------------------------
+networks:
+  sentinel_net:
+    driver: bridge

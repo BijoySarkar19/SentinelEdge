@@ -1,0 +1,20 @@
+import pytest
+from app.core.security import hash_password, verify_password, create_access_token, decode_access_token
+
+def test_password_hashing():
+    pw = "SentinelSecure2026!"
+    hashed = hash_password(pw)
+    assert hashed != pw
+    assert verify_password(pw, hashed) is True
+    assert verify_password("WrongPassword!", hashed) is False
+
+def test_jwt_token_creation_and_decoding():
+    payload = {"sub": "12345", "role": "operator"}
+    token = create_access_token(payload)
+    decoded = decode_access_token(token)
+    assert decoded is not None
+    assert decoded["sub"] == "12345"
+    assert decoded["role"] == "operator"
+
+def test_invalid_jwt_token():
+    assert decode_access_token("invalid.token.here") is None

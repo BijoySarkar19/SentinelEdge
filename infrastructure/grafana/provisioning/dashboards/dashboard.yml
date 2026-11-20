@@ -1,0 +1,22 @@
+# =============================================================================
+# SentinelEdge — Grafana Dashboard Provisioning
+# Loads JSON dashboard files from the provisioned path on startup.
+# Place *.json dashboard files in infrastructure/grafana/dashboards/
+# and mount that directory to /var/lib/grafana/dashboards in compose.yaml.
+# =============================================================================
+
+apiVersion: 1
+
+providers:
+  # ---------------------------------------------------------------------------
+  # SentinelEdge dashboards — loaded from filesystem
+  # ---------------------------------------------------------------------------
+  - name: SentinelEdge
+    orgId: 1
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true

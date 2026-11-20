@@ -1,0 +1,23 @@
+# =============================================================================
+# SentinelEdge — Grafana Datasource Provisioning
+# Automatically configures Prometheus as the default datasource on startup.
+# =============================================================================
+
+apiVersion: 1
+
+datasources:
+  # ---------------------------------------------------------------------------
+  # Prometheus (default)
+  # ---------------------------------------------------------------------------
+  - name: Prometheus
+    uid: prometheus-sentineledge
+    type: prometheus
+    url: http://prometheus:9090
+    access: proxy
+    isDefault: true
+    editable: false
+    jsonData:
+      httpMethod: POST
+      timeInterval: "15s"
+      queryTimeout: "60s"
+      exemplarTraceIdDestinations: []

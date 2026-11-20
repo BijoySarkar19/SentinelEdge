@@ -1,0 +1,207 @@
+# =============================================================================
+# SentinelEdge — Comprehensive .gitignore
+# Python + Node.js + Docker + ML/AI artefacts
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+*.manifest
+*.spec
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env.bak
+Pipfile.lock
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+.coverage.*
+coverage/
+coverage.xml
+htmlcov/
+*.coveragerc
+nosetests.xml
+test-results/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# Linting / formatting
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Distribution / packaging
+MANIFEST
+*.tar.gz
+*.whl
+
+# -----------------------------------------------------------------------------
+# Node.js / Next.js / Frontend
+# -----------------------------------------------------------------------------
+node_modules/
+.next/
+.nuxt/
+.output/
+dist/
+out/
+.cache/
+.parcel-cache/
+.turbo/
+.vercel/
+.netlify/
+
+# Package manager lock files (keep only one — commit the one you use)
+# yarn.lock         # uncommenting excludes Yarn lock
+# pnpm-lock.yaml    # uncommenting excludes pnpm lock
+
+# Build artefacts
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+.nyc_output/
+
+# -----------------------------------------------------------------------------
+# Environment & Secrets  (NEVER commit real secrets)
+# -----------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+.env.test
+# .env.example is intentionally NOT listed — it should be committed
+
+# Certificates & keys
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.jks
+secrets/
+
+# -----------------------------------------------------------------------------
+# ML / AI Model artefacts
+# -----------------------------------------------------------------------------
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.pb
+models/*.tflite
+models/*.bin
+models/*.safetensors
+models/*.gguf
+*.weights
+*.h5
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+.docker/
+docker-compose.override.yml
+# keep compose.yaml and compose.streaming.yaml
+
+# -----------------------------------------------------------------------------
+# Databases & data
+# -----------------------------------------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+postgres_data/
+redis_data/
+grafana_data/
+redpanda_data/
+chroma_data/
+
+# -----------------------------------------------------------------------------
+# Logs
+# -----------------------------------------------------------------------------
+*.log
+*.log.*
+logs/
+log/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# -----------------------------------------------------------------------------
+# OS artefacts
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# -----------------------------------------------------------------------------
+# IDEs & editors
+# -----------------------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.orig
+.project
+.classpath
+.settings/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# -----------------------------------------------------------------------------
+# Miscellaneous
+# -----------------------------------------------------------------------------
+.terraform/
+*.tfstate
+*.tfstate.*
+.vagrant/
+*.bak
+*.tmp
+*.temp
+.hypothesis/
+.benchmarks/
+site/
+docs/_build/
