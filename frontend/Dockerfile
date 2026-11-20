@@ -14,14 +14,11 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-# Copy lockfile(s) first for optimal Docker layer caching
-COPY package.json package-lock.json* ./
-# Uncomment the relevant line if using Yarn or pnpm instead:
-# COPY yarn.lock ./
-# COPY pnpm-lock.yaml ./
+# Copy lockfile(s) and npm config first for optimal Docker layer caching
+COPY package.json package-lock.json* .npmrc* ./
 
 # Install exact dependencies from lockfile
-RUN npm ci --omit=dev --ignore-scripts
+RUN npm ci --legacy-peer-deps
 
 # ---------------------------------------------------------------------------
 # Stage 2 — builder: compile Next.js application

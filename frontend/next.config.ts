@@ -10,6 +10,15 @@ const nextConfig: NextConfig = {
   },
   typescript: { ignoreBuildErrors: false },
   eslint: { ignoreDuringBuilds: false },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/dashboard',
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {

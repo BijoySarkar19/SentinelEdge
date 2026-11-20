@@ -69,3 +69,7 @@ async def root():
         "docs": "/api/docs",
         "api": "/api/v1",
     }
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "sentineledge-backend"}

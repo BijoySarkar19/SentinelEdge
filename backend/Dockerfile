@@ -24,11 +24,15 @@ RUN apt-get update \
 # Upgrade pip and install build backend
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Copy dependency manifest(s) first for layer caching
+# Install CPU PyTorch first for fast layer caching
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
+# Copy dependency manifest(s) and app source
 COPY pyproject.toml .
 COPY README.md* ./
+COPY app/ ./app/
 
-# Install the project and all its dependencies into the system site-packages
+# Install the project and all its dependencies
 RUN pip install --no-cache-dir .
 
 # ---------------------------------------------------------------------------
