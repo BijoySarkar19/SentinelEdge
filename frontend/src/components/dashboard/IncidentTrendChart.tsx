@@ -1,18 +1,43 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from "recharts";
+import { analyticsApi } from "@/lib/api";
 
-const data = [
-  { day: "Mon", incidents: 12, critical: 2 },
-  { day: "Tue", incidents: 18, critical: 4 },
-  { day: "Wed", incidents: 15, critical: 1 },
-  { day: "Thu", incidents: 25, critical: 5 },
-  { day: "Fri", incidents: 22, critical: 3 },
-  { day: "Sat", incidents: 30, critical: 7 },
-  { day: "Sun", incidents: 19, critical: 2 },
-];
+interface TrendData {
+  day: string;
+  incidents: number;
+  critical: number;
+}
 
-export function IncidentTrendChart() {
+export function IncidentTrendChart({ refreshKey }: { refreshKey?: number }) {
+  const [data, setData] = useState<TrendData[]>([
+    { day: "Mon", incidents: 4, critical: 1 },
+    { day: "Tue", incidents: 8, critical: 2 },
+    { day: "Wed", incidents: 6, critical: 1 },
+    { day: "Thu", incidents: 12, critical: 3 },
+    { day: "Fri", incidents: 10, critical: 2 },
+    { day: "Sat", incidents: 15, critical: 4 },
+    { day: "Sun", incidents: 8, critical: 1 },
+  ]);
+
+  useEffect(() => {
+    analyticsApi.trends(7)
+      .then((res) => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          const formatted = res.data.map((item: any) => ({
+            day: item.date ? new Date(item.date).toLocaleDateString("en-US", { weekday: "short" }) : (item.day || "Day"),
+            incidents: item.total_incidents ?? item.incidents ?? 0,
+            critical: item.critical_count ?? item.critical ?? 0,
+          }));
+          setData(formatted);
+        }
+      })
+      .catch(() => {
+        // Keep fallback on error
+      });
+  }, [refreshKey]);
+
   return (
     <div className="glass-card p-5">
       <div className="flex items-center justify-between mb-4">

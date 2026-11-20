@@ -1,9 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Search as SearchIcon, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { Search as SearchIcon, Sparkles, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { searchApi } from "@/lib/api";
+
+const SUGGESTIONS = [
+  "chemical hazmat breach near fuel tank",
+  "unauthorized person entering server room",
+  "vehicle blocking emergency exit",
+  "crowd gathering in restricted zone",
+  "loitering at perimeter fence after hours",
+];
 
 export default function SemanticSearchPage() {
   const [query, setQuery] = useState("Vehicle congestion near main entrance");
@@ -11,39 +20,28 @@ export default function SemanticSearchPage() {
   const [loading, setLoading] = useState(false);
   const [latency, setLatency] = useState<number | null>(null);
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const executeSearch = async (searchTerm: string) => {
+    if (!searchTerm.trim()) return;
     setLoading(true);
     try {
-      const res = await searchApi.semantic(query);
+      const res = await searchApi.semantic(searchTerm);
       setResults(res.data.results || []);
       setLatency(res.data.search_latency_ms || res.data.latency_ms || 42.1);
     } catch {
-      // Mock results if backend offline
-      setResults([
-        {
-          incident_id: "inc-01",
-          title: "Vehicle Congestion Warning on Access Lane",
-          description: "Multiple vehicles stationary over threshold near entrance gate",
-          severity: "medium",
-          status: "open",
-          confidence: 0.88,
-          similarity_score: 0.94,
-        },
-        {
-          incident_id: "inc-04",
-          title: "Stationary Vehicle Blockage on Emergency Fire Lane",
-          description: "Emergency vehicle lane blocked by delivery truck",
-          severity: "critical",
-          status: "resolved",
-          confidence: 0.96,
-          similarity_score: 0.86,
-        },
-      ]);
-      setLatency(38.4);
+      // Graceful fallback
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    executeSearch(query);
+  };
+
+  const handleSelectSuggestion = (sug: string) => {
+    setQuery(sug);
+    executeSearch(sug);
   };
 
   return (
@@ -72,11 +70,27 @@ export default function SemanticSearchPage() {
         </div>
         <button
           type="submit"
-          className="rounded-lg bg-brand-cyan px-5 py-2.5 text-sm font-semibold text-background hover:bg-brand-cyan/80 transition glow-cyan"
+          disabled={loading}
+          className="rounded-lg bg-brand-cyan px-5 py-2.5 text-sm font-semibold text-background hover:bg-brand-cyan/80 transition glow-cyan disabled:opacity-50"
         >
           {loading ? "Searching..." : "Search"}
         </button>
       </form>
+
+      {/* Suggestion Chips */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[11px] text-text-secondary">Try searching:</span>
+        {SUGGESTIONS.map((sug) => (
+          <button
+            key={sug}
+            type="button"
+            onClick={() => handleSelectSuggestion(sug)}
+            className="text-[11px] px-2.5 py-1 rounded-md bg-white/5 hover:bg-brand-cyan/10 hover:text-brand-cyan border border-white/10 text-text-secondary transition"
+          >
+            "{sug}"
+          </button>
+        ))}
+      </div>
 
       {latency && (
         <div className="text-xs text-text-secondary">
@@ -91,6 +105,14 @@ export default function SemanticSearchPage() {
               <div>
                 <h4 className="text-sm font-semibold text-text-primary">{r.title}</h4>
                 <p className="mt-1 text-xs text-text-secondary">{r.description}</p>
+                <div className="mt-3">
+                  <Link
+                    href={`/incidents/${r.incident_id}`}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand-cyan hover:underline"
+                  >
+                    Open Forensic Investigation Workspace <ExternalLink className="h-3 w-3" />
+                  </Link>
+                </div>
               </div>
               <div className="flex flex-col items-end gap-1.5">
                 <Badge type="severity" value={r.severity} />

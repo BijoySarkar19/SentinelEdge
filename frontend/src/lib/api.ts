@@ -10,6 +10,7 @@ import type {
   SearchResult,
   SystemHealth,
   User,
+  Rule,
 } from '@/types';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
@@ -66,9 +67,9 @@ export const authApi = {
 
 // Cameras
 export const camerasApi = {
-  list: (page = 1, pageSize = 20) =>
-    api.get<PaginatedResponse<Camera>>('/cameras', {
-      params: { page, page_size: pageSize },
+  list: (skip = 0, limit = 100) =>
+    api.get<Camera[]>('/cameras', {
+      params: { skip, limit },
     }),
   get: (id: string) => api.get<Camera>(`/cameras/${id}`),
   create: (data: Partial<Camera>) => api.post<Camera>('/cameras', data),
@@ -83,11 +84,22 @@ export const incidentsApi = {
     api.get<PaginatedResponse<Incident>>('/incidents', { params }),
   get: (id: string) => api.get<Incident>(`/incidents/${id}`),
   acknowledge: (id: string, comment?: string) =>
-    api.post(`/incidents/${id}/acknowledge`, { comment }),
+    api.post<Incident>(`/incidents/${id}/acknowledge`, { comment }),
   resolve: (id: string, comment?: string) =>
-    api.post(`/incidents/${id}/resolve`, { comment }),
-  update: (id: string, data: Partial<Incident>) =>
-    api.patch(`/incidents/${id}`, data),
+    api.post<Incident>(`/incidents/${id}/resolve`, { comment }),
+  update: (id: string, data: Partial<Incident> & { comment?: string }) =>
+    api.patch<Incident>(`/incidents/${id}`, data),
+  ingest: (eventData: Record<string, unknown>) =>
+    api.post<Incident>('/incidents/ingest', eventData),
+};
+
+// Rules
+export const rulesApi = {
+  list: (cameraId?: string) =>
+    api.get<Rule[]>('/rules', { params: cameraId ? { camera_id: cameraId } : {} }),
+  create: (data: Partial<Rule>) => api.post<Rule>('/rules', data),
+  update: (id: string, data: Partial<Rule>) => api.patch<Rule>(`/rules/${id}`, data),
+  delete: (id: string) => api.delete(`/rules/${id}`),
 };
 
 // Analytics

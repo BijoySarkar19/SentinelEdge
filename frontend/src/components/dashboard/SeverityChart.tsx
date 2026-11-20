@@ -1,21 +1,56 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
+import { analyticsApi } from "@/lib/api";
 
-const data = [
-  { name: "Critical", value: 14, color: "#EF4444" },
-  { name: "High", value: 28, color: "#F97316" },
-  { name: "Medium", value: 45, color: "#F59E0B" },
-  { name: "Low", value: 32, color: "#10B981" },
-  { name: "Informational", value: 19, color: "#3B82F6" },
-];
+const SEVERITY_COLORS: Record<string, string> = {
+  critical: "#EF4444",
+  high: "#F97316",
+  medium: "#F59E0B",
+  low: "#10B981",
+  informational: "#3B82F6",
+};
 
-export function SeverityChart() {
+interface SeverityItem {
+  name: string;
+  value: number;
+  color: string;
+}
+
+export function SeverityChart({ refreshKey }: { refreshKey?: number }) {
+  const [data, setData] = useState<SeverityItem[]>([
+    { name: "Critical", value: 3, color: "#EF4444" },
+    { name: "High", value: 2, color: "#F97316" },
+    { name: "Medium", value: 2, color: "#F59E0B" },
+    { name: "Low", value: 1, color: "#10B981" },
+  ]);
+
+  useEffect(() => {
+    analyticsApi.severity()
+      .then((res) => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          const formatted = res.data.map((item: any) => {
+            const sevKey = (item.severity || "").toLowerCase();
+            return {
+              name: sevKey ? sevKey.charAt(0).toUpperCase() + sevKey.slice(1) : "Unknown",
+              value: item.count ?? item.value ?? 0,
+              color: SEVERITY_COLORS[sevKey] || "#94A3B8",
+            };
+          }).filter(d => d.value > 0);
+          if (formatted.length > 0) {
+            setData(formatted);
+          }
+        }
+      })
+      .catch(() => {});
+  }, [refreshKey]);
+
   return (
     <div className="glass-card flex flex-col justify-between p-5">
       <div>
         <h3 className="text-sm font-semibold tracking-wide text-text-primary uppercase">Severity Composition</h3>
-        <p className="text-xs text-text-secondary">Distribution of detected incidents</p>
+        <p className="text-xs text-text-secondary">Real-time incident distribution</p>
       </div>
 
       <div className="h-48 w-full mt-2">

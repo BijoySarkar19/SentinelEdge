@@ -59,6 +59,9 @@ export interface Incident {
   inference_latency_ms?: number;
   created_at: string;
   updated_at: string;
+  audits?: IncidentAudit[];
+  camera?: Camera;
+  zone?: Zone;
 }
 
 export interface IncidentAudit {
@@ -110,7 +113,9 @@ export interface AnalyticsSummary {
   critical_incidents: number;
   resolved_incidents: number;
   avg_inference_latency_ms: number;
-  event_volume_24h: number;
+  event_volume_24h?: number;
+  total_incidents_24h?: number;
+  avg_resolution_time_minutes?: number;
 }
 
 export interface TrendPoint {

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api";
 import { Bell, LogOut, ShieldCheck } from "lucide-react";
@@ -26,13 +27,14 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-4">
-        <button
+        <Link
+          href="/incidents"
           className="relative rounded-lg p-2 text-text-secondary hover:bg-white/5 hover:text-text-primary transition"
-          title="Incident Alerts"
+          title="Inspect Active Incidents"
         >
           <Bell className="h-5 w-5" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-sentinel-critical" />
-        </button>
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-sentinel-critical animate-pulse" />
+        </Link>
 
         <div className="h-6 w-[1px] bg-white/10" />
 
