@@ -1,19 +1,19 @@
 <p align="center">
-  <img src="docs/assets/banner.svg" alt="SentinelEdge Hero Banner" width="100%" />
+  <img src="./docs/assets/banner.svg" alt="SentinelEdge Hero Banner" width="100%" />
 </p>
 
 <p align="center">
-  <strong>Privacy-First Edge-to-Cloud Real-Time Video & Incident Intelligence Platform</strong><br>
+  <strong>Privacy-First Edge-to-Cloud Real-Time Video &amp; Incident Intelligence Platform</strong><br>
   <em>See the Risk. Protect the Privacy. Respond Intelligently.</em>
 </p>
 
 <p align="center">
-  <a href="#-quick-start"><img src="https://img.shields.io/badge/Status-Production--Ready%20MVP-22D3EE?style=for-the-badge&logo=shield" alt="Status" /></a>
-  <a href="https://pytorch.org"><img src="https://img.shields.io/badge/Hardware-NVIDIA%20RTX%203050%20(6GB)-76B900?style=for-the-badge&logo=nvidia&logoColor=white" alt="GPU" /></a>
-  <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/Backend-FastAPI%20v1-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" /></a>
-  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Frontend-Next.js%2015%20App%20Router-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" /></a>
-  <a href="https://github.com/pgvector/pgvector"><img src="https://img.shields.io/badge/Vector%20DB-PostgreSQL%20%2B%20pgvector-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" /></a>
-  <a href="https://redis.io"><img src="https://img.shields.io/badge/Streaming-Redis%20Streams-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" /></a>
+  <a href="#quick-start-run-sentineledge-in-3-minutes"><img src="https://img.shields.io/badge/Status-Production--Ready%20MVP-22D3EE?style=for-the-badge&amp;logo=shield" alt="Status" /></a>
+  <a href="https://pytorch.org"><img src="https://img.shields.io/badge/Hardware-NVIDIA%20RTX%203050%20(6GB)-76B900?style=for-the-badge&amp;logo=nvidia&amp;logoColor=white" alt="GPU" /></a>
+  <a href="https://fastapi.tiangolo.com"><img src="https://img.shields.io/badge/Backend-FastAPI%20v1-009688?style=for-the-badge&amp;logo=fastapi&amp;logoColor=white" alt="FastAPI" /></a>
+  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Frontend-Next.js%2015%20App%20Router-000000?style=for-the-badge&amp;logo=nextdotjs&amp;logoColor=white" alt="Next.js" /></a>
+  <a href="https://github.com/pgvector/pgvector"><img src="https://img.shields.io/badge/Vector%20DB-PostgreSQL%20%2B%20pgvector-336791?style=for-the-badge&amp;logo=postgresql&amp;logoColor=white" alt="PostgreSQL" /></a>
+  <a href="https://redis.io"><img src="https://img.shields.io/badge/Streaming-Redis%20Streams-DC382D?style=for-the-badge&amp;logo=redis&amp;logoColor=white" alt="Redis" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-F59E0B?style=for-the-badge" alt="License" /></a>
 </p>
 
@@ -22,30 +22,31 @@
 ## ⚡ Real-Time Edge Processing Pipeline
 
 <p align="center">
-  <img src="docs/assets/pipeline.svg" alt="SentinelEdge Real-Time Pipeline" width="100%" />
+  <img src="./docs/assets/pipeline.svg" alt="SentinelEdge Real-Time Pipeline" width="100%" />
 </p>
 
 ---
 
 ## 📋 Table of Contents
-- [🎯 The Problem & Our Solution](#-the-problem--our-solution)
-- [✨ Key Architectural Innovations](#-key-architectural-innovations)
-- [🚀 Quick Start (Run SentinelEdge in 3 Minutes)](#-quick-start-run-sentineledge-in-3-minutes)
+- [🎯 The Problem and Our Solution](#the-problem-and-our-solution)
+- [✨ Key Architectural Innovations](#key-architectural-innovations)
+- [🚀 Quick Start (Run SentinelEdge in 3 Minutes)](#quick-start-run-sentineledge-in-3-minutes)
   - [Prerequisites](#prerequisites)
   - [Step 1: Launch Infrastructure with Docker](#step-1-launch-infrastructure-with-docker)
   - [Step 2: Open Enterprise Web Console](#step-2-open-enterprise-web-console)
   - [Step 3: Generate Synthetic Incidents](#step-3-generate-synthetic-incidents)
-- [🛡️ Privacy-First Zero-Video Guarantee](#️-privacy-first-zero-video-guarantee)
-- [🧠 Incident Rules Engine](#-incident-rules-engine)
-- [🔍 Semantic Incident Search (pgvector)](#-semantic-incident-search-pgvector)
-- [📊 Benchmark Performance (RTX 3050 Laptop GPU)](#-benchmark-performance-rtx-3050-laptop-gpu)
-- [📂 Monorepo Structure](#-monorepo-structure)
-- [🕹️ Bonus: 404 Sentinel Patrol Mini-Game](#️-bonus-404-sentinel-patrol-mini-game)
-- [🛣️ 8-Week Engineering Roadmap](#️-8-week-engineering-roadmap)
+- [🛡️ Privacy-First Zero-Video Guarantee](#privacy-first-zero-video-guarantee)
+- [🧠 Incident Rules Engine](#incident-rules-engine)
+- [🔍 Semantic Incident Search (pgvector)](#semantic-incident-search-pgvector)
+- [📊 Benchmark Performance (RTX 3050 Laptop GPU)](#benchmark-performance-rtx-3050-laptop-gpu)
+- [📂 Monorepo Structure](#monorepo-structure)
+- [🕹️ Bonus: 404 Sentinel Patrol Mini-Game](#bonus-404-sentinel-patrol-mini-game)
+- [🛣️ 8-Week Engineering Roadmap](#8-week-engineering-roadmap)
+- [📄 License](#license)
 
 ---
 
-## 🎯 The Problem & Our Solution
+## 🎯 The Problem and Our Solution
 
 Traditional CCTV systems record hundreds of hours of passive footage that operators cannot monitor in real time. Streaming raw video to the cloud incurs immense bandwidth costs, introduces latency, and creates catastrophic personal privacy and compliance liabilities under GDPR and international privacy statutes.
 

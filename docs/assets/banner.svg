@@ -1,152 +1,147 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="100%" height="340">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340">
   <defs>
+    <!-- Background Gradients -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#050B16" />
-      <stop offset="50%" stop-color="#091426" />
+      <stop offset="45%" stop-color="#081426" />
+      <stop offset="75%" stop-color="#0A1830" />
       <stop offset="100%" stop-color="#050B16" />
     </linearGradient>
 
     <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#22D3EE" />
+      <stop offset="50%" stop-color="#38BDF8" />
       <stop offset="100%" stop-color="#3B82F6" />
     </linearGradient>
 
     <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0B192D" />
-      <stop offset="100%" stop-color="#10223A" />
+      <stop offset="0%" stop-color="#0E223D" />
+      <stop offset="50%" stop-color="#0B1A2E" />
+      <stop offset="100%" stop-color="#071220" />
     </linearGradient>
 
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="8" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
+    <radialGradient id="orbGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.16" />
+      <stop offset="50%" stop-color="#3B82F6" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#050B16" stop-opacity="0" />
+    </radialGradient>
 
-    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
+    <radialGradient id="radarOrb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.22" />
+      <stop offset="60%" stop-color="#22D3EE" stop-opacity="0.03" />
+      <stop offset="100%" stop-color="#050B16" stop-opacity="0" />
+    </radialGradient>
 
+    <!-- Background Grid Pattern -->
     <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(34, 211, 238, 0.05)" stroke-width="1" />
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#22D3EE" stroke-opacity="0.04" stroke-width="1" />
     </pattern>
-
-    <style>
-      @keyframes pulse {
-        0%, 100% { opacity: 0.8; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.03); }
-      }
-      @keyframes scanline {
-        0% { transform: translateY(-30px); opacity: 0; }
-        20% { opacity: 0.8; }
-        80% { opacity: 0.8; }
-        100% { transform: translateY(320px); opacity: 0; }
-      }
-      @keyframes radarRotate {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-      @keyframes wave {
-        0%, 100% { stroke-dashoffset: 0; }
-        50% { stroke-dashoffset: 40; }
-      }
-      .shield-group {
-        transform-origin: 160px 170px;
-        animation: pulse 4s ease-in-out infinite;
-      }
-      .radar-sweep {
-        transform-origin: 160px 170px;
-        animation: radarRotate 6s linear infinite;
-      }
-      .scan-beam {
-        animation: scanline 4s ease-in-out infinite;
-      }
-      .telemetry-line {
-        stroke-dasharray: 8 4;
-        animation: wave 3s linear infinite;
-      }
-    </style>
   </defs>
 
-  <!-- Background -->
-  <rect width="100%" height="100%" fill="url(#bgGrad)" />
-  <rect width="100%" height="100%" fill="url(#grid)" />
+  <!-- Base Canvas -->
+  <rect width="1200" height="340" fill="url(#bgGrad)" />
+  <rect width="1200" height="340" fill="url(#grid)" />
 
   <!-- Ambient Light Orbs -->
-  <circle cx="160" cy="170" r="140" fill="#22D3EE" opacity="0.08" filter="url(#glow)" />
-  <circle cx="950" cy="90" r="180" fill="#3B82F6" opacity="0.06" filter="url(#glow)" />
+  <circle cx="170" cy="170" r="160" fill="url(#radarOrb)" />
+  <circle cx="950" cy="100" r="200" fill="url(#orbGlow)" />
+  <circle cx="600" cy="280" r="140" fill="url(#orbGlow)" />
 
-  <!-- Scanning Beam Effect -->
-  <line x1="0" y1="0" x2="1200" y2="0" stroke="url(#cyanGrad)" stroke-width="2" opacity="0.6" class="scan-beam" filter="url(#subtleGlow)" />
+  <!-- Top & Bottom Tech Border Glows -->
+  <rect x="0" y="0" width="1200" height="2" fill="url(#cyanGrad)" opacity="0.8" />
+  <rect x="0" y="338" width="1200" height="2" fill="url(#cyanGrad)" opacity="0.4" />
 
-  <!-- Decorative Circuit Wave Lines -->
-  <path d="M 320 220 L 520 220 L 580 260 L 980 260 L 1020 220 L 1180 220" fill="none" stroke="#22D3EE" stroke-width="1.5" opacity="0.25" class="telemetry-line" />
-  <circle cx="580" cy="260" r="3" fill="#22D3EE" opacity="0.7" />
-  <circle cx="980" cy="260" r="3" fill="#3B82F6" opacity="0.7" />
+  <!-- Circuit Trace Lines -->
+  <path d="M 310 115 L 430 115 L 450 135 L 750 135" fill="none" stroke="#22D3EE" stroke-width="1.2" stroke-opacity="0.25" />
+  <circle cx="450" cy="135" r="3" fill="#22D3EE" opacity="0.7" />
+  <path d="M 310 225 L 530 225 L 560 255 L 940 255 L 970 225 L 1180 225" fill="none" stroke="#3B82F6" stroke-width="1.2" stroke-opacity="0.2" />
+  <circle cx="560" cy="255" r="3" fill="#3B82F6" opacity="0.6" />
+  <circle cx="940" cy="255" r="3" fill="#22D3EE" opacity="0.6" />
 
-  <!-- Shield & Radar Hub -->
-  <g class="shield-group">
-    <!-- Radar outer range rings -->
-    <circle cx="160" cy="170" r="85" fill="none" stroke="#22D3EE" stroke-width="1" opacity="0.2" stroke-dasharray="4 4" />
-    <circle cx="160" cy="170" r="110" fill="none" stroke="#3B82F6" stroke-width="1" opacity="0.15" />
+  <!-- Radar & Shield Emblem (Left Side) -->
+  <g transform="translate(170, 170)">
+    <!-- Radar concentric rings -->
+    <circle cx="0" cy="0" r="115" fill="none" stroke="#22D3EE" stroke-width="1" stroke-opacity="0.12" stroke-dasharray="6 6" />
+    <circle cx="0" cy="0" r="90" fill="none" stroke="#3B82F6" stroke-width="1" stroke-opacity="0.18" />
+    <circle cx="0" cy="0" r="65" fill="none" stroke="#22D3EE" stroke-width="1" stroke-opacity="0.22" stroke-dasharray="3 3" />
+    
+    <!-- Radar Crosshairs -->
+    <line x1="-120" y1="0" x2="120" y2="0" stroke="#22D3EE" stroke-width="1" stroke-opacity="0.15" />
+    <line x1="0" y1="-120" x2="0" y2="120" stroke="#22D3EE" stroke-width="1" stroke-opacity="0.15" />
 
-    <!-- Radar Sweep Wedge -->
-    <path d="M 160 170 L 235 125 A 85 85 0 0 1 245 170 Z" fill="url(#cyanGrad)" opacity="0.15" class="radar-sweep" />
+    <!-- Radar Sweep Sector -->
+    <path d="M 0 0 L 80 -45 A 90 90 0 0 1 90 0 Z" fill="url(#cyanGrad)" opacity="0.2" />
 
-    <!-- Shield Polygon -->
-    <path d="M 160 90 L 225 120 V 175 C 225 218 197 248 160 260 C 123 248 95 218 95 175 V 120 Z"
-          fill="url(#shieldGrad)" stroke="#22D3EE" stroke-width="3" filter="url(#subtleGlow)" />
+    <!-- Cybernetic Shield Body -->
+    <path d="M 0 -72 L 60 -42 V 12 C 60 52 32 80 0 92 C -32 80 -60 52 -60 12 V -42 Z"
+          fill="url(#shieldGrad)" stroke="#22D3EE" stroke-width="2.5" />
 
-    <!-- Shield Inner Core Eye -->
-    <ellipse cx="160" cy="170" rx="36" ry="24" fill="none" stroke="#22D3EE" stroke-width="2.5" />
-    <circle cx="160" cy="170" r="12" fill="#22D3EE" filter="url(#subtleGlow)">
-      <animate attributeName="r" values="10;13;10" dur="2.5s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="160" cy="170" r="5" fill="#050B16" />
+    <!-- Shield Inner Bezel -->
+    <path d="M 0 -60 L 48 -36 V 10 C 48 42 26 65 0 75 C -26 65 -48 42 -48 10 V -36 Z"
+          fill="none" stroke="#38BDF8" stroke-width="1" stroke-opacity="0.4" />
 
-    <!-- Reticle Crosshairs -->
-    <line x1="160" y1="135" x2="160" y2="148" stroke="#22D3EE" stroke-width="2" />
-    <line x1="160" y1="192" x2="160" y2="205" stroke="#22D3EE" stroke-width="2" />
-    <line x1="115" y1="170" x2="128" y2="170" stroke="#22D3EE" stroke-width="2" />
-    <line x1="192" y1="170" x2="205" y2="170" stroke="#22D3EE" stroke-width="2" />
+    <!-- Central All-Seeing Reticle Eye -->
+    <ellipse cx="0" cy="4" rx="28" ry="18" fill="none" stroke="#22D3EE" stroke-width="2" />
+    <circle cx="0" cy="4" r="8" fill="#22D3EE" />
+    <circle cx="0" cy="4" r="3" fill="#FFFFFF" />
+    <circle cx="0" cy="4" r="15" fill="none" stroke="#38BDF8" stroke-width="1" stroke-opacity="0.6" stroke-dasharray="3 3" />
+    
+    <!-- Scanning Laser Line -->
+    <line x1="-24" y1="4" x2="24" y2="4" stroke="#FFFFFF" stroke-width="1.5" opacity="0.8" />
   </g>
 
-  <!-- Typography & Headers -->
-  <g transform="translate(320, 0)">
-    <!-- Pill Badge -->
-    <g transform="translate(0, 68)">
-      <rect width="280" height="26" rx="13" fill="rgba(34, 211, 238, 0.1)" stroke="rgba(34, 211, 238, 0.3)" stroke-width="1" />
-      <circle cx="14" cy="13" r="4" fill="#10B981">
-        <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite" />
-      </circle>
-      <text x="26" y="17" fill="#22D3EE" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.2">PRIVACY-FIRST EDGE AI PLATFORM</text>
+  <!-- Typography & Brand (Center-Right) -->
+  <!-- Top Category / Security Protocol Label -->
+  <g transform="translate(340, 75)">
+    <rect x="0" y="0" width="220" height="22" rx="4" fill="#0E223D" stroke="#22D3EE" stroke-width="1" stroke-opacity="0.4" />
+    <circle cx="12" cy="11" r="4" fill="#10B981" />
+    <text x="24" y="15" fill="#22D3EE" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace" font-size="11" font-weight="700" letter-spacing="1.5">ZERO-RAW-VIDEO DEFENSE</text>
+  </g>
+
+  <!-- Primary Project Title -->
+  <text x="340" y="145" fill="url(#cyanGrad)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="52" font-weight="900" letter-spacing="2">SENTINEL-EDGE</text>
+
+  <!-- Subtitle Tagline -->
+  <text x="342" y="180" fill="#E2E8F0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="600" letter-spacing="0.5">Privacy-First Edge-to-Cloud Real-Time Video &amp; Incident Intelligence</text>
+
+  <text x="342" y="202" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-style="italic">See the Risk. Protect the Privacy. Respond Intelligently.</text>
+
+  <!-- Tech Stack Feature Pills -->
+  <g transform="translate(340, 235)">
+    <!-- Pill 1: YOLOv8n -->
+    <g transform="translate(0, 0)">
+      <rect width="135" height="28" rx="6" fill="#0B1A2E" stroke="#22D3EE" stroke-width="1" stroke-opacity="0.5" />
+      <circle cx="14" cy="14" r="3.5" fill="#22D3EE" />
+      <text x="26" y="18" fill="#F8FAFC" font-family="-apple-system, sans-serif" font-size="11" font-weight="600">YOLOv8n + ByteTrack</text>
     </g>
 
-    <!-- Main Title -->
-    <text x="0" y="142" fill="#F8FAFC" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="52" font-weight="900" letter-spacing="-1">
-      SENTINEL<tspan fill="#22D3EE">EDGE</tspan>
-    </text>
-
-    <!-- Tagline -->
-    <text x="0" y="178" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" letter-spacing="0.4">
-      See the Risk. <tspan fill="#22D3EE">Protect the Privacy.</tspan> Respond Intelligently.
-    </text>
-
-    <!-- Specs Pill Group -->
-    <g transform="translate(0, 215)">
-      <rect x="0" y="0" width="130" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
-      <text x="14" y="18" fill="#F8FAFC" font-family="monospace" font-size="11" font-weight="600">RTX 3050 6GB</text>
-
-      <rect x="140" y="0" width="115" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
-      <text x="154" y="18" fill="#22D3EE" font-family="monospace" font-size="11" font-weight="600">YOLOv8 + Byte</text>
-
-      <rect x="265" y="0" width="105" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
-      <text x="279" y="18" fill="#3B82F6" font-family="monospace" font-size="11" font-weight="600">FastAPI v1</text>
-
-      <rect x="380" y="0" width="100" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
-      <text x="394" y="18" fill="#10B981" font-family="monospace" font-size="11" font-weight="600">pgvector</text>
-
-      <rect x="490" y="0" width="110" height="28" rx="6" fill="#0B192D" stroke="rgba(255,255,255,0.08)" />
-      <text x="504" y="18" fill="#F97316" font-family="monospace" font-size="11" font-weight="600">Next.js 15</text>
+    <!-- Pill 2: Face Anonymization -->
+    <g transform="translate(145, 0)">
+      <rect width="145" height="28" rx="6" fill="#0B1A2E" stroke="#10B981" stroke-width="1" stroke-opacity="0.5" />
+      <circle cx="14" cy="14" r="3.5" fill="#10B981" />
+      <text x="26" y="18" fill="#F8FAFC" font-family="-apple-system, sans-serif" font-size="11" font-weight="600">In-Memory Face Blur</text>
     </g>
+
+    <!-- Pill 3: pgvector -->
+    <g transform="translate(300, 0)">
+      <rect width="145" height="28" rx="6" fill="#0B1A2E" stroke="#3B82F6" stroke-width="1" stroke-opacity="0.5" />
+      <circle cx="14" cy="14" r="3.5" fill="#3B82F6" />
+      <text x="26" y="18" fill="#F8FAFC" font-family="-apple-system, sans-serif" font-size="11" font-weight="600">pgvector Smart Search</text>
+    </g>
+
+    <!-- Pill 4: Hardware Target -->
+    <g transform="translate(455, 0)">
+      <rect width="165" height="28" rx="6" fill="#0B1A2E" stroke="#F59E0B" stroke-width="1" stroke-opacity="0.5" />
+      <circle cx="14" cy="14" r="3.5" fill="#F59E0B" />
+      <text x="26" y="18" fill="#F8FAFC" font-family="-apple-system, sans-serif" font-size="11" font-weight="600">RTX 3050 (6GB) / CPU</text>
+    </g>
+  </g>
+
+  <!-- Live Telemetry Status Indicators (Bottom Right) -->
+  <g transform="translate(980, 290)">
+    <text x="180" y="0" text-anchor="end" fill="#64748B" font-family="monospace" font-size="10">PIPELINE: ACTIVE (30 FPS)</text>
+    <text x="180" y="16" text-anchor="end" fill="#22D3EE" font-family="monospace" font-size="10" opacity="0.9">LATENCY: ~18ms (FP16 CUDA)</text>
+    <text x="180" y="32" text-anchor="end" fill="#10B981" font-family="monospace" font-size="10">PRIVACY AUDIT: 100% COMPLIANT</text>
   </g>
 </svg>
