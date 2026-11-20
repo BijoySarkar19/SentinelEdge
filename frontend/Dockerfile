@@ -77,7 +77,7 @@ EXPOSE 3000
 
 # Health check — hits the Next.js health/readiness route
 HEALTHCHECK --interval=30s --timeout=10s --retries=5 --start-period=30s \
-  CMD wget -qO- http://localhost:3000/ > /dev/null 2>&1 || exit 1
+  CMD wget -qO- http://127.0.0.1:3000/login > /dev/null 2>&1 || exit 1
 
 # Start the standalone Next.js server
 CMD ["node", "server.js"]
