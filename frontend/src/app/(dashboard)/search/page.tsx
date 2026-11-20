@@ -17,7 +17,7 @@ export default function SemanticSearchPage() {
     try {
       const res = await searchApi.semantic(query);
       setResults(res.data.results || []);
-      setLatency(res.data.search_latency_ms || 42.1);
+      setLatency(res.data.latency_ms || 42.1);
     } catch {
       // Mock results if backend offline
       setResults([

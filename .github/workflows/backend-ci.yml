@@ -17,7 +17,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
-          pip install pytest pytest-asyncio httpx structlog pgvector redis slowapi prometheus-client email-validator
+          pip install pytest pytest-asyncio httpx structlog pgvector redis slowapi prometheus-client email-validator fastapi pydantic pydantic-settings "sqlalchemy[asyncio]" asyncpg argon2-cffi "python-jose[cryptography]" websockets anyio python-multipart
       - name: Run Backend Unit Tests
         run: |
           python -m pytest backend/tests -v

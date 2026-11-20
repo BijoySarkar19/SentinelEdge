@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { CheckCircle2, Search, ArrowLeft, Clock } from "lucide-react";
 
-export default function IncidentDetailPage({ params }: { params: { id: string } }) {
+export default function IncidentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const [status, setStatus] = useState("open");
 
   return (
@@ -22,7 +23,7 @@ export default function IncidentDetailPage({ params }: { params: { id: string } 
               <Badge type="status" value={status} />
             </div>
             <h1 className="text-xl font-bold text-text-primary">Restricted Zone Occupancy in Secure Industrial Bay</h1>
-            <p className="text-xs text-text-secondary mt-1">Incident ID: {params.id || "inc-02"} • Generated via Edge CV ByteTrack</p>
+            <p className="text-xs text-text-secondary mt-1">Incident ID: {resolvedParams?.id || "inc-02"} • Generated via Edge CV ByteTrack</p>
           </div>
         </div>
 
