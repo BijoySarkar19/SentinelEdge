@@ -143,7 +143,7 @@ export default function IncidentsPage() {
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1.5 bg-background-secondary/80 p-1 rounded-lg border border-white/5 text-xs">
+        <div className="flex flex-wrap items-center gap-1.5 bg-background-secondary/80 p-1 rounded-lg border border-white/5 text-xs overflow-x-auto">
           {["all", "open", "acknowledged", "investigating", "resolved"].map((st) => (
             <button
               key={st}
@@ -187,8 +187,8 @@ export default function IncidentsPage() {
       </div>
 
       {/* Incidents Table */}
-      <div className="glass-card overflow-hidden">
-        <table className="w-full text-left text-sm">
+      <div className="glass-card overflow-x-auto">
+        <table className="w-full min-w-[800px] text-left text-sm">
           <thead className="bg-background-secondary text-xs uppercase tracking-wider text-text-secondary border-b border-white/5">
             <tr>
               <th className="px-6 py-3.5 font-semibold">Incident Title</th>

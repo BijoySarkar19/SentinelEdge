@@ -42,6 +42,8 @@
 - [📂 Monorepo Structure](#monorepo-structure)
 - [🕹️ Bonus: 404 Sentinel Patrol Mini-Game](#bonus-404-sentinel-patrol-mini-game)
 - [🛣️ 8-Week Engineering Roadmap](#8-week-engineering-roadmap)
+- [📱 Responsive Design (Mobile, Tablet & TV NOC Wall)](#-responsive-design-mobile-tablet--tv-noc-wall)
+- [⚖️ Legal, Privacy & Compliance Suite](#️-legal-privacy--compliance-suite)
 - [📄 License](#license)
 
 ---
@@ -265,6 +267,31 @@ Detailed progress plan from prototype to enterprise-grade cluster deployment:
 - **Week 8**: Production Hardening & CI/CD Packaging *(Complete)*
 
 *See [docs/EIGHT_WEEK_ROADMAP.md](docs/EIGHT_WEEK_ROADMAP.md) for full delivery matrices.*
+
+---
+
+## 📱 Responsive Design (Mobile, Tablet & TV NOC Wall)
+
+SentinelEdge is built with an adaptive responsive architecture optimized for all viewport form factors:
+
+* **Mobile Phones (320px – 640px)**: Collapsible slide-out navigation drawer, touch-friendly tap targets, horizontal table scroll containers, and single-column stacked telemetry widgets.
+* **Tablets & Laptops (641px – 1024px)**: 2-column balanced KPI grids, responsive SVG GIS maps, and accessible filter controls.
+* **Command Center TV & NOC Walls (1080p, 4K, 8K Ultra-Wide)**: One-click **TV / NOC Wall Mode** (toggled in the top navigation bar) that hides extraneous chrome, maximizes video tile density to 3+ columns, and expands real-time incident feeds for 24/7 security control room monitors.
+
+---
+
+## ⚖️ Legal, Privacy & Compliance Suite
+
+SentinelEdge is supported by a comprehensive legal and compliance framework:
+
+| Document | Purpose | Primary Standards / Jurisdictions |
+| :--- | :--- | :--- |
+| [**Privacy Policy**](docs/legal/PRIVACY_POLICY.md) | Enterprise data processing policy, in-memory redaction & metadata boundaries | GDPR Art. 5, 25; CCPA/CPRA |
+| [**Terms of Service**](docs/legal/TERMS_OF_SERVICE.md) | Software licensing terms, assistive decision-support & warranty limits | Apache 2.0; Commercial deployer terms |
+| [**Acceptable Use Policy**](docs/legal/ACCEPTABLE_USE_POLICY.md) | Mandatory ethical boundaries, permitted safety uses vs. prohibited biometric tracking | UN Human Rights; EU AI Ethics |
+| [**GDPR Compliance Guide & DPIA**](docs/legal/GDPR_COMPLIANCE_GUIDE.md) | Article-by-Article mapping, Data Protection Impact Assessment (DPIA) template | GDPR Art. 5, 6, 9, 25, 32, 35 |
+| [**Responsible AI Statement**](docs/legal/AI_ETHICS_AND_RESPONSIBLE_USE.md) | Algorithmic transparency, model fairness, and human oversight guarantees | EU AI Act (Regulation (EU) 2024/1689) |
+| [**Third-Party Notices**](docs/legal/THIRD_PARTY_LICENSES.md) | Open-source dependency attributions & Ultralytics YOLOv8 licensing advisory | AGPL-3.0 / MIT / Apache 2.0 / BSD |
 
 ---
 

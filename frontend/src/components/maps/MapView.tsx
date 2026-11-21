@@ -46,14 +46,14 @@ export default function MapView({ cameras = [], incidents = [] }: MapViewProps) 
 
   if (!mounted) {
     return (
-      <div className="h-[550px] w-full rounded-xl bg-background-card flex items-center justify-center">
+      <div className="h-[380px] sm:h-[480px] lg:h-[580px] 2xl:h-[700px] w-full rounded-xl bg-background-card flex items-center justify-center">
         <span className="text-sm text-text-secondary">Loading GIS Engine...</span>
       </div>
     );
   }
 
   return (
-    <div className="relative h-[550px] w-full overflow-hidden rounded-xl bg-background-card border border-white/5">
+    <div className="relative h-[380px] sm:h-[480px] lg:h-[580px] 2xl:h-[700px] w-full overflow-hidden rounded-xl bg-background-card border border-white/5">
       <div className="absolute top-4 left-4 z-10 rounded-md bg-background-secondary/90 px-3 py-1.5 text-xs font-semibold text-text-primary border border-white/10 backdrop-blur-md">
         Sector GIS Overview • Facility Polygon Coordinates
       </div>

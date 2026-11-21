@@ -110,7 +110,7 @@ export default function SystemHealthPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {components.map((c) => {
           const Icon = c.icon;
           return (

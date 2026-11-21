@@ -133,8 +133,8 @@ export default function RulesEnginePage() {
         </div>
       )}
 
-      <div className="glass-card overflow-hidden">
-        <table className="w-full text-left text-sm">
+      <div className="glass-card overflow-x-auto">
+        <table className="w-full min-w-[700px] text-left text-sm">
           <thead className="bg-background-secondary text-xs uppercase tracking-wider text-text-secondary border-b border-white/5">
             <tr>
               <th className="px-6 py-3.5 font-semibold">Rule Name</th>

@@ -101,7 +101,7 @@ export default function LiveMonitorPage() {
       )}
 
       {/* Camera Video Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 2xl:grid-cols-3">
         {loading ? (
           <div className="col-span-2 py-16 text-center text-xs text-text-secondary">
             Connecting to edge video multiplexer...
